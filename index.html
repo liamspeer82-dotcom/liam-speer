@@ -2,28 +2,561 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Liam Speer | Official Creator Website</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Liam Speer — Australian TikTok creator broadcasting from Newcastle, NSW." />
+  <title>Liam Speer // Signal 2030</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,500&family=JetBrains+Mono:wght@400;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0b0b0d;
+      --bg-tint: #111116;
+      --ink: #f2efe6;
+      --ink-dim: #8a8a86;
+      --rule: #2a2a2f;
+      --acid: #d4ff3a;
+      --signal: #ff4a2b;
+      --paper: #efeadd;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Bricolage Grotesque", "Helvetica Neue", sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* -------- atmosphere: grain + scanlines -------- */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      background-image:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255,255,255,0.018) 0,
+          rgba(255,255,255,0.018) 1px,
+          transparent 1px,
+          transparent 3px
+        );
+      mix-blend-mode: overlay;
+    }
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 998;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/></svg>");
+      opacity: 0.18;
+      mix-blend-mode: soft-light;
+    }
+
+    /* -------- top status bar -------- */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 14px 28px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      border-bottom: 1px solid var(--rule);
+      background: rgba(11,11,13,0.72);
+      backdrop-filter: blur(8px);
+      z-index: 50;
+    }
+    .topbar .left { display: flex; gap: 22px; }
+    .topbar .center { color: var(--acid); }
+    .topbar .right { text-align: right; display: flex; gap: 22px; justify-content: flex-end; }
+    .dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      background: var(--acid);
+      border-radius: 50%;
+      margin-right: 8px;
+      transform: translateY(-1px);
+      box-shadow: 0 0 0 2px rgba(212,255,58,0.18);
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+
+    /* -------- main grid -------- */
+    main {
+      min-height: 100vh;
+      padding: 96px 28px 120px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 64px;
+      max-width: 1480px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 900px) {
+      main {
+        grid-template-columns: 0.9fr 2.2fr 0.9fr;
+        gap: 48px;
+        padding-top: 110px;
+      }
+    }
+
+    /* -------- side columns -------- */
+    .meta {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11.5px;
+      line-height: 1.7;
+      letter-spacing: 0.04em;
+      color: var(--ink-dim);
+    }
+    .meta h4 {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      color: var(--acid);
+      margin: 0 0 10px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .meta-block {
+      padding: 18px 0;
+      border-top: 1px solid var(--rule);
+    }
+    .meta-block:last-child { border-bottom: 1px solid var(--rule); }
+    .meta dt {
+      color: var(--ink-dim);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-top: 8px;
+    }
+    .meta dd {
+      margin: 2px 0 0;
+      color: var(--ink);
+      font-size: 12.5px;
+    }
+
+    .left-col { animation: rise 1.1s 0.2s both cubic-bezier(.2,.7,.2,1); }
+    .right-col { animation: rise 1.1s 0.5s both cubic-bezier(.2,.7,.2,1); }
+
+    /* -------- center hero -------- */
+    .hero { position: relative; }
+
+    .label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: 14px;
+      margin-bottom: 30px;
+    }
+    .label-row span:first-child { color: var(--ink); }
+
+    .name {
+      font-family: "Anton", "Impact", sans-serif;
+      font-weight: 400;
+      font-size: clamp(88px, 18vw, 280px);
+      line-height: 0.86;
+      letter-spacing: -0.01em;
+      margin: 0;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+    .name .liam { display: block; animation: rise 1.2s 0.1s both cubic-bezier(.2,.7,.2,1); }
+    .name .speer {
+      display: block;
+      color: transparent;
+      -webkit-text-stroke: 1.5px var(--ink);
+      transform: translateX(8%);
+      animation: rise 1.2s 0.32s both cubic-bezier(.2,.7,.2,1);
+    }
+    .name .speer .ascent {
+      color: var(--acid);
+      -webkit-text-stroke: 0;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(28px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .tagline {
+      margin-top: 36px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 22px;
+      align-items: end;
+      animation: rise 1.1s 0.55s both cubic-bezier(.2,.7,.2,1);
+    }
+    @media (min-width: 720px) {
+      .tagline { grid-template-columns: 1.4fr 1fr; }
+    }
+
+    .tagline p {
+      font-size: clamp(17px, 1.4vw, 21px);
+      line-height: 1.45;
+      max-width: 46ch;
+      color: var(--ink);
+      margin: 0;
+    }
+    .tagline p em {
+      font-family: "Instrument Serif", serif;
+      font-style: italic;
+      font-weight: 400;
+      color: var(--acid);
+      letter-spacing: 0.005em;
+    }
+
+    .index-tag {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      text-align: right;
+      align-self: end;
+    }
+
+    /* -------- CTA -------- */
+    .cta-row {
+      margin-top: 56px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: center;
+      animation: rise 1.1s 0.75s both cubic-bezier(.2,.7,.2,1);
+    }
+
+    .cta {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      padding: 20px 28px 20px 32px;
+      background: var(--acid);
+      color: #0b0b0d;
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 999px;
+      transition: transform .35s cubic-bezier(.2,.7,.2,1), background .35s, color .35s;
+      overflow: hidden;
+    }
+    .cta::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--ink);
+      transform: translateY(102%);
+      transition: transform .45s cubic-bezier(.2,.7,.2,1);
+      z-index: 0;
+    }
+    .cta > * { position: relative; z-index: 1; }
+    .cta:hover { color: var(--acid); }
+    .cta:hover::before { transform: translateY(0); }
+    .cta:hover .cta-arrow { transform: translateX(4px) rotate(-45deg); }
+
+    .cta-arrow {
+      width: 16px; height: 16px;
+      transition: transform .35s cubic-bezier(.2,.7,.2,1);
+    }
+
+    .cta-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11.5px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      text-decoration: none;
+      padding: 14px 4px;
+      border-bottom: 1px solid var(--rule);
+      transition: color .3s, border-color .3s;
+    }
+    .cta-secondary:hover { color: var(--acid); border-color: var(--acid); }
+
+    /* -------- right column visuals -------- */
+    .badge {
+      width: 100%;
+      aspect-ratio: 1;
+      border: 1px solid var(--rule);
+      border-radius: 50%;
+      position: relative;
+      display: grid;
+      place-items: center;
+      margin-bottom: 28px;
+    }
+    .badge svg { width: 100%; height: 100%; animation: spin 28s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .badge .core {
+      position: absolute;
+      inset: 26%;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(212,255,58,0.55), transparent 55%),
+        radial-gradient(circle at 70% 70%, rgba(255,74,43,0.35), transparent 60%),
+        #16161a;
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.6);
+    }
+
+    /* -------- marquee ticker -------- */
+    .ticker {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--acid);
+      color: #0b0b0d;
+      font-family: "Anton", sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 14px 0;
+      overflow: hidden;
+      border-top: 1px solid #0b0b0d;
+      z-index: 40;
+    }
+    .ticker-track {
+      display: inline-flex;
+      gap: 48px;
+      white-space: nowrap;
+      animation: slide 38s linear infinite;
+      padding-left: 48px;
+    }
+    .ticker-track span { display: inline-flex; align-items: center; gap: 48px; }
+    .ticker-track .sep {
+      width: 10px; height: 10px;
+      background: #0b0b0d;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    @keyframes slide {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* -------- decorative crosshairs -------- */
+    .crosshair {
+      position: absolute;
+      width: 14px; height: 14px;
+      color: var(--ink-dim);
+      pointer-events: none;
+    }
+    .crosshair::before, .crosshair::after {
+      content: "";
+      position: absolute;
+      background: currentColor;
+    }
+    .crosshair::before { left: 50%; top: 0; bottom: 0; width: 1px; transform: translateX(-50%); }
+    .crosshair::after { top: 50%; left: 0; right: 0; height: 1px; transform: translateY(-50%); }
+
+    .ch-tl { top: 80px; left: 14px; }
+    .ch-tr { top: 80px; right: 14px; }
+    .ch-bl { bottom: 70px; left: 14px; }
+    .ch-br { bottom: 70px; right: 14px; }
+
+    /* -------- mobile tightening -------- */
+    @media (max-width: 720px) {
+      .topbar { font-size: 9.5px; padding: 10px 16px; gap: 8px; }
+      .topbar .left, .topbar .right { gap: 10px; }
+      .topbar .center { display: none; }
+      main { padding: 88px 18px 110px; gap: 48px; }
+      .ticker { font-size: 16px; }
+      .crosshair { display: none; }
+      .name .speer { transform: translateX(0); }
+    }
+  </style>
 </head>
-<body style="font-family: Arial; background:#111; color:white; text-align:center; padding:40px;">
-  <h1>Liam Speer</h1>
-  <p>Official Creator Website | Newcastle, NSW</p>
+<body>
 
-  <h2>Australian TikTok Creator</h2>
-  <p>I am an active TikTok creator building a growing audience through engaging content.</p>
+  <header class="topbar" role="banner">
+    <div class="left">
+      <span><span class="dot"></span>SIGNAL.LIVE</span>
+      <span>NODE / LSPR-04</span>
+    </div>
+    <div class="center">TRANSMISSION 2030 // CREATOR INDEX</div>
+    <div class="right">
+      <span>32.9283&deg; S</span>
+      <span>151.7817&deg; E</span>
+      <span id="clock">--:--:--</span>
+    </div>
+  </header>
 
-  <br>
+  <span class="crosshair ch-tl" aria-hidden="true"></span>
+  <span class="crosshair ch-tr" aria-hidden="true"></span>
+  <span class="crosshair ch-bl" aria-hidden="true"></span>
+  <span class="crosshair ch-br" aria-hidden="true"></span>
 
-  <a href="https://www.tiktok.com/@Liam.speer" target="_blank" 
-     style="background:#2563eb; color:white; padding:12px 20px; text-decoration:none; border-radius:20px;">
-     Visit My TikTok
-  </a>
+  <main>
 
-  <br><br>
+    <aside class="meta left-col" aria-label="Profile metadata">
+      <div class="meta-block">
+        <h4>// Subject</h4>
+        <dl>
+          <dt>Designation</dt>
+          <dd>Liam Speer</dd>
+          <dt>Class</dt>
+          <dd>Independent Creator</dd>
+          <dt>Origin</dt>
+          <dd>Newcastle, NSW &mdash; AU</dd>
+        </dl>
+      </div>
+      <div class="meta-block">
+        <h4>// Channel</h4>
+        <dl>
+          <dt>Platform</dt>
+          <dd>TikTok / @liam.speer</dd>
+          <dt>Format</dt>
+          <dd>Short-form video, vertical</dd>
+          <dt>Status</dt>
+          <dd style="color: var(--acid)">Broadcasting</dd>
+        </dl>
+      </div>
+    </aside>
 
-  <p>Contact: liamspeer82@gmail.com</p>
+    <section class="hero" aria-label="Liam Speer headline">
+      <div class="label-row">
+        <span>File &mdash; LS.2030 / Public Profile</span>
+        <span>Rev. 04 &middot; 05.2026</span>
+      </div>
 
-  <br>
-  <p>© 2026 Liam Speer</p>
+      <h1 class="name">
+        <span class="liam">Liam</span>
+        <span class="speer">Sp<span class="ascent">e</span>er</span>
+      </h1>
+
+      <div class="tagline">
+        <p>
+          Australian short-form creator broadcasting daily from the
+          Hunter coast. Building a <em>growing audience</em> on TikTok
+          through honest, character-led video.
+        </p>
+        <div class="index-tag">
+          IDX &mdash; 001 / 001<br>
+          ARCHIVE &middot; 2026 &rarr; 2030
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a class="cta" href="https://www.tiktok.com/@Liam.speer" target="_blank" rel="noopener noreferrer">
+          <span>Open the channel</span>
+          <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="square"/>
+          </svg>
+        </a>
+        <a class="cta-secondary" href="mailto:liamspeer82@gmail.com">
+          <span>liamspeer82@gmail.com</span>
+        </a>
+      </div>
+    </section>
+
+    <aside class="meta right-col" aria-label="Transmission data">
+      <div class="badge" aria-hidden="true">
+        <svg viewBox="0 0 200 200">
+          <defs>
+            <path id="circle" d="M 100,100 m -82,0 a 82,82 0 1,1 164,0 a 82,82 0 1,1 -164,0" />
+          </defs>
+          <text font-family="JetBrains Mono, monospace" font-size="10.5" letter-spacing="6" fill="#8a8a86">
+            <textPath href="#circle">LIAM SPEER &middot; TIKTOK CREATOR &middot; NEWCASTLE NSW &middot; SIGNAL 2030 &middot; </textPath>
+          </text>
+        </svg>
+        <span class="core"></span>
+      </div>
+
+      <div class="meta-block">
+        <h4>// Contact</h4>
+        <dl>
+          <dt>Direct</dt>
+          <dd>liamspeer82<br>@gmail.com</dd>
+          <dt>Bookings</dt>
+          <dd>By inbound only</dd>
+        </dl>
+      </div>
+      <div class="meta-block">
+        <h4>// Notice</h4>
+        <p style="margin: 6px 0 0; font-size: 11.5px; line-height: 1.6; color: var(--ink-dim);">
+          This page is the official creator
+          presence of Liam Speer. All content
+          links resolve to verified accounts.
+        </p>
+      </div>
+      <div class="meta-block" style="border-bottom: none;">
+        <h4>// &copy; 2030</h4>
+        <p style="margin: 6px 0 0; font-size: 11.5px; color: var(--ink-dim);">
+          Liam Speer. All transmissions reserved.
+        </p>
+      </div>
+    </aside>
+
+  </main>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span>
+        Liam Speer <i class="sep"></i>
+        Newcastle &middot; New South Wales <i class="sep"></i>
+        TikTok Creator <i class="sep"></i>
+        Signal 2030 <i class="sep"></i>
+        Now Broadcasting <i class="sep"></i>
+        Liam Speer <i class="sep"></i>
+        Newcastle &middot; New South Wales <i class="sep"></i>
+        TikTok Creator <i class="sep"></i>
+        Signal 2030 <i class="sep"></i>
+        Now Broadcasting <i class="sep"></i>
+      </span>
+      <span>
+        Liam Speer <i class="sep"></i>
+        Newcastle &middot; New South Wales <i class="sep"></i>
+        TikTok Creator <i class="sep"></i>
+        Signal 2030 <i class="sep"></i>
+        Now Broadcasting <i class="sep"></i>
+        Liam Speer <i class="sep"></i>
+        Newcastle &middot; New South Wales <i class="sep"></i>
+        TikTok Creator <i class="sep"></i>
+        Signal 2030 <i class="sep"></i>
+        Now Broadcasting <i class="sep"></i>
+      </span>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const el = document.getElementById('clock');
+      if (!el) return;
+      function tick() {
+        const d = new Date();
+        const pad = n => String(n).padStart(2, '0');
+        el.textContent = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds()) + ' AEST';
+      }
+      tick();
+      setInterval(tick, 1000);
+    })();
+  </script>
+
 </body>
 </html>
